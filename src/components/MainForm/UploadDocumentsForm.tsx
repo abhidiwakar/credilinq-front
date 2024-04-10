@@ -1,20 +1,18 @@
 import uiTheme from "@/context/theme.context";
-import { Done } from "@mui/icons-material";
-import {
-  Box,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import React from "react";
-import PaperDropzone from "../ui/Dropzone";
-import { useFormContext } from "react-hook-form";
 import {
   MainFormInput,
   fieldHasErrorOrNotTouched,
 } from "@/validators/main-form.validator";
+import { Done } from "@mui/icons-material";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from "@mui/material";
+import { useFormContext } from "react-hook-form";
+import PaperDropzone from "../ui/Dropzone";
 
 const instructions = [
   <>

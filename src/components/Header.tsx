@@ -1,10 +1,13 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
 import HeaderBG from "@/assets/images/header-bg.jpg";
 import Logo from "@/assets/images/logo.png";
+import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
-export default function Header() {
+type Props = {
+  title: string;
+};
+
+export default function Header({ title }: Props) {
   return (
     <Box
       sx={{
@@ -25,7 +28,7 @@ export default function Header() {
       >
         <Image src={Logo} alt="Logo" />
         <Typography fontSize={28} color="white" fontWeight={500}>
-          SME HealthCheck - Get Started
+          SME HealthCheck - {title}
         </Typography>
       </Box>
     </Box>

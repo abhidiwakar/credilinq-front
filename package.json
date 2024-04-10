@@ -15,6 +15,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@mui/x-data-grid": "^7.1.1",
     "google-libphonenumber": "^3.2.34",
     "next": "14.1.4",
     "react": "^18",

@@ -1,6 +1,5 @@
-import { UploadFileOutlined, UploadFileRounded } from "@mui/icons-material";
-import { Box, Paper } from "@mui/material";
-import { ComponentProps, createRef, forwardRef } from "react";
+import { UploadFileOutlined } from "@mui/icons-material";
+import { Box } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 
 type Props = {

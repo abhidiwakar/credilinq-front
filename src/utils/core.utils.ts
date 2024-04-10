@@ -9,3 +9,8 @@ export const isValidPhone = (phone: string) => {
     return false;
   }
 };
+
+export const safeParseInt = (value: string | number): number | null => {
+  const parsed = parseInt(value as string);
+  return isNaN(parsed) ? null : parsed;
+};

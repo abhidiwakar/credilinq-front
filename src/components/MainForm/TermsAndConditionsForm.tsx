@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import React from "react";
 import { useFormContext } from "react-hook-form";
 
 const tncs = [

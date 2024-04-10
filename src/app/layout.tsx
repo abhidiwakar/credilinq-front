@@ -1,5 +1,3 @@
-import uiTheme from "@/context/theme.context";
-import { ThemeProvider } from "@emotion/react";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";

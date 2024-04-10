@@ -1,6 +1,5 @@
-import { Box } from "@mui/material";
-import React from "react";
 import HeaderBG from "@/assets/images/header-bg.jpg";
+import { Box } from "@mui/material";
 
 export default function Footer() {
   return (
