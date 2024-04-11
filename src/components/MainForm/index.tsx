@@ -1,10 +1,9 @@
 "use client";
 
 import uiTheme from "@/context/theme.context";
-import mainFormSchema, {
-  MainFormInput,
-} from "@/validators/main-form.validator";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import MainFormInput from "@/types/main-form";
+import mainFormSchema from "@/validators/main-form.validator";
 import {
   Box,
   Button,
@@ -14,7 +13,8 @@ import {
   Stepper,
   ThemeProvider,
 } from "@mui/material";
-import { FormProvider, useForm } from "react-hook-form";
+import { Formik } from "formik";
+import { useRouter } from "next/navigation";
 import ApplicantInformationForm from "./ApplicantInformationForm";
 import CompanyInformationForm from "./CompanyInformationForm";
 import StepperLabel from "./StepperLabel";
@@ -45,40 +45,63 @@ const steppers = [
 ];
 
 export default function MainForm() {
-  const methods = useForm<MainFormInput>({
-    mode: "onBlur",
-    resolver: zodResolver(mainFormSchema),
-  });
-
-  const onSubmit = (data: MainFormInput) => console.log(data);
+  const router = useRouter();
+  const { trigger, isMutating } = useFormSubmit();
+  const handleSubmit = async (values: MainFormInput) => {
+    const result = await trigger(values);
+    if (result.ok) {
+      router.push("/entries");
+    }
+  };
 
   return (
     <ThemeProvider theme={uiTheme}>
-      <FormProvider {...methods}>
-        <Container sx={{ background: "white", paddingY: 5 }}>
-          <form onSubmit={methods.handleSubmit(onSubmit)}>
-            <Stepper orientation="vertical">
-              {steppers.map((step) => (
-                <Step key={step.uid} expanded>
-                  <StepperLabel label={step.label} />
-                  <StepContent>
-                    <step.component />
-                  </StepContent>
-                </Step>
-              ))}
-            </Stepper>
-            <Box display="flex" justifyContent="end" mt={2}>
-              <Button
-                disabled={!methods.formState.isValid}
-                type="submit"
-                variant="contained"
-              >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        </Container>
-      </FormProvider>
+      <Formik<MainFormInput>
+        initialValues={{
+          applicantInfo: {
+            email: "",
+            fullName: "",
+            mobile: "",
+            position: "",
+            reEmail: "",
+          },
+          companyInfo: {
+            name: "",
+            uen: "",
+          },
+          documents: [],
+          tnc: false,
+        }}
+        validateOnMount={false}
+        onSubmit={handleSubmit}
+        validationSchema={mainFormSchema}
+      >
+        {(props) => (
+          <Container sx={{ background: "white", paddingY: 5 }}>
+            <form onSubmit={props.handleSubmit}>
+              <Stepper orientation="vertical">
+                {steppers.map((step) => (
+                  <Step key={step.uid} expanded>
+                    <StepperLabel label={step.label} />
+                    <StepContent>
+                      <step.component />
+                    </StepContent>
+                  </Step>
+                ))}
+              </Stepper>
+              <Box display="flex" justifyContent="end" mt={2}>
+                <Button
+                  disabled={!props.isValid || isMutating}
+                  type="submit"
+                  variant="contained"
+                >
+                  {isMutating ? "Submitting..." : "Submit"}
+                </Button>
+              </Box>
+            </form>
+          </Container>
+        )}
+      </Formik>
     </ThemeProvider>
   );
 }

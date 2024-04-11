@@ -1,22 +1,41 @@
+"use client";
+
+import uiTheme from "@/context/theme.context";
 import { UploadFileOutlined } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
+import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 type Props = {
   disabled?: boolean;
+  uploadFile: (files: File[]) => void;
+  isMutating: boolean;
+  maxFiles?: number;
 };
 
-function PaperDropzone({ disabled = false }: Props) {
+function PaperDropzone({
+  disabled = false,
+  uploadFile,
+  isMutating,
+  maxFiles,
+}: Props) {
+  const [hover, setHover] = useState(false);
   const { getRootProps, getInputProps } = useDropzone({
-    disabled,
+    disabled: disabled,
     onDrop: (acceptedFiles) => {
-      console.log(acceptedFiles);
+      setHover(false);
+      uploadFile(acceptedFiles);
     },
-    onDropRejected(fileRejections, event) {
-      console.log(fileRejections);
+    onDropRejected(fileRejections, event) {},
+    onDragEnter: () => setHover(true),
+    onDragLeave: () => setHover(false),
+    onDragOver: () => setHover(true),
+    multiple: true,
+    maxFiles: maxFiles || 1,
+    maxSize: 1024 * 1024 * 5, // 5MB
+    accept: {
+      "application/pdf": [".pdf"],
     },
-    maxFiles: 6,
-    maxSize: 1024 * 5 * 1000, // 5MB
   });
   const { ref, ...rootProps } = getRootProps();
 
@@ -29,16 +48,22 @@ function PaperDropzone({ disabled = false }: Props) {
       justifyContent="center"
       flexDirection="column"
       border={1}
-      borderColor={"#E0E0E0"}
+      borderColor={hover ? uiTheme.palette.primary.main : "#E0E0E0"}
       borderRadius={1}
       textAlign="center"
     >
-      <input {...getInputProps()} />
-      <UploadFileOutlined color={disabled ? "disabled" : "action"} />
-      <p style={{ color: disabled ? "gray" : "inherit" }}>
-        <span style={{ textDecoration: "underline" }}>Click to upload</span> or
-        drag and drop Bank Statements
-      </p>
+      {isMutating ? (
+        <CircularProgress size={20} />
+      ) : (
+        <>
+          <input {...getInputProps()} />
+          <UploadFileOutlined color={disabled ? "disabled" : "action"} />
+          <p style={{ color: disabled ? "gray" : "inherit" }}>
+            <span style={{ textDecoration: "underline" }}>Click to upload</span>{" "}
+            or drag and drop Bank Statements
+          </p>
+        </>
+      )}
     </Box>
   );
 }

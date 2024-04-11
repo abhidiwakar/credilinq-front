@@ -1,16 +1,19 @@
 import uiTheme from "@/context/theme.context";
-import { MainFormInput } from "@/validators/main-form.validator";
+import MainFormInput from "@/types/main-form";
 import { Done } from "@mui/icons-material";
 import {
   Box,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  FormGroup,
+  FormHelperText,
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
+  ListItemText
 } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { useFormikContext } from "formik";
 
 const tncs = [
   <>
@@ -39,16 +42,20 @@ const tncs = [
 ];
 
 export default function TermsAndConditionsForm() {
-  const { register } = useFormContext<MainFormInput>();
-
+  const { getFieldProps, errors } = useFormikContext<MainFormInput>();
 
   return (
     <Box>
-      <FormControlLabel
-        {...register("tnc")}
-        control={<Checkbox />}
-        label="By ticking, you are confirming that you have understood and are agreeing to the details mentioned:"
-      />
+      <FormControl>
+        <FormGroup>
+          <FormControlLabel
+            {...getFieldProps("tnc")}
+            control={<Checkbox />}
+            label="By ticking, you are confirming that you have understood and are agreeing to the details mentioned:"
+          />
+          <FormHelperText error>{errors.tnc}</FormHelperText>
+        </FormGroup>
+      </FormControl>
       <List>
         {tncs.map((tnc, index) => (
           <ListItem key={index} disablePadding alignItems="flex-start">

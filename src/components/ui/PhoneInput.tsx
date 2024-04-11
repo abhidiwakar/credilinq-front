@@ -22,9 +22,7 @@ export interface MUIPhoneProps extends BaseTextFieldProps {
   onChange: (phone: string) => void;
 }
 
-// export const PhoneInputComponent = ;
-
-export const MuiPhone = React.forwardRef<HTMLInputElement, MUIPhoneProps>(
+const MuiPhone = React.forwardRef<HTMLInputElement, MUIPhoneProps>(
   ({ value, onChange, ...restProps }, ref) => {
     const {
       inputValue,
@@ -37,9 +35,7 @@ export const MuiPhone = React.forwardRef<HTMLInputElement, MUIPhoneProps>(
       defaultCountry: "sg",
       value,
       countries: defaultCountries,
-      onChange: (data) => {
-        onChange(data.phone);
-      },
+      onChange: (data) => onChange(data.phone),
     });
 
     return (
@@ -126,3 +122,7 @@ export const MuiPhone = React.forwardRef<HTMLInputElement, MUIPhoneProps>(
     );
   }
 );
+
+MuiPhone.displayName = "MuiPhone";
+
+export { MuiPhone };

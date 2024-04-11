@@ -1,62 +1,60 @@
 import { isValidPhone } from "@/utils/core.utils";
-import { FieldErrors } from "react-hook-form";
-import { z } from "zod";
+import * as yup from "yup";
 
-export const companyInfoSchema = z.object({
-  uen: z
+export const companyInfoSchema = yup.object({
+  uen: yup
     .string()
-    .min(1, "Company UEN is required")
-    .regex(/^[0-9]{8}[A-Z]$/, { message: "Invalid Company UEN" }),
-  name: z.string().min(2, "Minimum 2 characters required"),
+    .required("Company UEN is required")
+    .matches(/^[0-9]{8}[A-Z]$/, "Invalid Company UEN"),
+  name: yup
+    .string()
+    .min(2, "Minimum 2 characters required")
+    .required("Company name is required"),
 });
 
-export const applicantInfoSchema = z
-  .object({
-    fullName: z.string().min(2, "Minimum 2 characters required"),
-    position: z.string().min(2, "Minimum 2 characters required"),
-    email: z.string().email("Invalid email address"),
-    reEmail: z.string().email("Invalid email address"),
-    mobile: z.string().refine((value) => isValidPhone(value), {
-      message: "Invalid phone number",
+export const applicantInfoSchema = yup.object({
+  fullName: yup
+    .string()
+    .min(2, "Minimum 2 characters required")
+    .required("Full name is required"),
+  position: yup
+    .string()
+    .min(2, "Minimum 2 characters required")
+    .required("Position is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  reEmail: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required")
+    .test("email-match", "Emails do not match", function (value) {
+      return value === this.parent.email;
     }),
-  })
-  .refine((data) => data.email === data.reEmail, {
-    message: "Emails do not match",
-    path: ["applicantInfo", "reEmail"],
-  });
-
-export const documentsSchema = z
-  .array(z.string())
-  .nonempty()
-  .max(6, { message: "Maximum 6 files allowed" });
-
-export const tncSchema = z.boolean().refine((value) => value, {
-  message: "Please accept the terms and conditions",
+  mobile: yup
+    .string()
+    .test("phone", "Invalid phone number", isValidPhone)
+    .required("Mobile number is required"),
 });
 
-const mainFormSchema = z.object({
+export const documentsSchema = yup
+  .array()
+  .of(yup.string())
+  .min(6, "At least 6 file are required")
+  .max(6, "Maximum 6 files allowed")
+  .required("Please upload 6 files");
+
+export const tncSchema = yup
+  .boolean()
+  .oneOf([true], "Please accept the terms and conditions")
+  .required("Please accept the terms and conditions");
+
+const mainFormSchema = yup.object({
   companyInfo: companyInfoSchema,
   applicantInfo: applicantInfoSchema,
   documents: documentsSchema,
   tnc: tncSchema,
 });
-
-export type MainFormInput = z.infer<typeof mainFormSchema>;
-
-export const fieldHasErrorOrNotTouched = (
-  names: string[],
-  errors: FieldErrors<MainFormInput>,
-  touched: Partial<Readonly<unknown>>
-) => {
-  return names.some(
-    (field) =>
-      Object.keys(errors).some((errorFields) =>
-        errorFields.startsWith(field)
-      ) ||
-      !Object.keys(touched).some((touchedField) =>
-        touchedField.startsWith(field)
-      )
-  );
-};
 
 export default mainFormSchema;

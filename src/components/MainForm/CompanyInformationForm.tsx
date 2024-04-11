@@ -1,20 +1,17 @@
-import { MainFormInput } from "@/validators/main-form.validator";
+import MainFormInput from "@/types/main-form";
 import { Grid, TextField } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { useFormikContext } from "formik";
 
 export default function CompanyInformationForm() {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<MainFormInput>();
+  const { getFieldProps, errors } = useFormikContext<MainFormInput>();
   return (
     <Grid py={2} container spacing={2} rowSpacing={3}>
       <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
           label="Comapny UEN"
-          {...register("companyInfo.uen")}
-          helperText={errors.companyInfo?.uen?.message}
+          {...getFieldProps("companyInfo.uen")}
+          helperText={errors.companyInfo?.uen}
           error={Boolean(errors.companyInfo?.uen)}
         />
       </Grid>
@@ -22,8 +19,8 @@ export default function CompanyInformationForm() {
         <TextField
           fullWidth
           label="Comapny Name"
-          {...register("companyInfo.name")}
-          helperText={errors.companyInfo?.name?.message}
+          {...getFieldProps("companyInfo.name")}
+          helperText={errors.companyInfo?.name}
           error={Boolean(errors.companyInfo?.name)}
         />
       </Grid>

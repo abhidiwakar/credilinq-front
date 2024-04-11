@@ -12,7 +12,7 @@ git clone https://github.com/abhidiwakar/credilinq-front.git
 
 ## Getting Started
 
-First, install the dependencies:
+#### 1. Install the dependencies:
 
 ```bash
 npm install
@@ -24,7 +24,9 @@ pnpm install
 bun install
 ```
 
-Then, run the development server:
+#### 2. Create a `.env` file and paste content from `example.env` file in it.
+
+#### 3. Run the development server:
 
 ```bash
 npm run dev
