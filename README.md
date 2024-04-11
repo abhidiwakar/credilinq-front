@@ -1,5 +1,5 @@
-# Creqlinq.AI Frontend using Next.Js
-Clone of Credlinq SME HealthCheck page designed and developed using [Material UI](https://mui.com/) and [Next.js 14](https://nextjs.org/).
+# Credilinq.AI Frontend using Next.Js
+Clone of Credilinq SME HealthCheck page designed and developed using [Material UI](https://mui.com/) and [Next.js 14](https://nextjs.org/).
 
 ## UI Screenshot
 ![Screenshot of the rendered UI](.github/ui-screenshot.png)
